@@ -2,5 +2,5 @@
   "appId": "com.brandingtime.meco",
   "appName": "meco",
   "bundledWebRuntime": false,
-  "webDir": "www"
+  "webDir": "dist/apps/app"
 }
