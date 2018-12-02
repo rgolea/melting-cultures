@@ -48,6 +48,7 @@
     "@ngrx/router-store": "6.1.0",
     "@ngrx/store": "6.1.0",
     "@nrwl/nx": "7.1.0",
+    "cordova-plugin-audioinput": "^1.0.1",
     "core-js": "^2.5.4",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"
