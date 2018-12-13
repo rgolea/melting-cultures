@@ -1,0 +1,6 @@
+type Church implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  location: Location!
+}

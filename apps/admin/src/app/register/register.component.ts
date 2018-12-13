@@ -4,6 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { LeafletDirective } from '@asymmetrik/ngx-leaflet';
 import { debounceTime } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-register',
@@ -54,7 +55,8 @@ export class RegisterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -79,7 +81,7 @@ export class RegisterComponent implements OnInit {
     this.invalidateSize$.next('stateChange');
   }
 
-  test(){
-    console.log(this.marker.getLatLng());
+  register(){
+    this.router.navigate(['/languages']);
   }
 }

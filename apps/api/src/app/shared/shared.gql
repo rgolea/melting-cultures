@@ -1,0 +1,8 @@
+interface Node {
+  id: ID!
+}
+
+type Location {
+  lng: String!
+  lat: String!
+}

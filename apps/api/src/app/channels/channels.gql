@@ -1,0 +1,5 @@
+type Channel implements Node {
+  id: ID!
+  name: String!
+  description: String
+}

@@ -10,6 +10,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -20,6 +22,9 @@
     "paths": {
       "@meco/*": [
         "libs/*"
+      ],
+      "@meco/languages": [
+        "libs/languages/src/index.ts"
       ]
     }
   }
