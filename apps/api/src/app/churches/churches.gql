@@ -1,6 +1,25 @@
 type Church implements Node {
   id: ID!
   name: String!
-  email: String!
+  email: Email!
   location: Location!
+}
+
+input ChurchInput {
+  id: ID!
+  name: String!
+  email: Email!
+  location: LocationInput!
+  password: String!
+}
+
+
+type Query {
+  viewer: Church
+}
+
+type Mutation {
+  register(
+    church: ChurchInput!
+  ): Church
 }

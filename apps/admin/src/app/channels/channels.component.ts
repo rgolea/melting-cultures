@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ChannelComponent } from '../channel/channel.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'meco-channels',
@@ -9,6 +10,11 @@ import { ChannelComponent } from '../channel/channel.component';
   providers: [ ModalController ]
 })
 export class ChannelsComponent implements OnInit {
+
+  private channels = [];
+
+  public channels$ = new Subject();
+
   constructor(
     private readonly modalController: ModalController
   ) {}
@@ -22,5 +28,9 @@ export class ChannelsComponent implements OnInit {
     });
 
     await modal.present();
+
+    const dismissed = await modal.onDidDismiss();
+    this.channels = this.channels.concat(dismissed.data);
+    this.channels$.next(this.channels);
   }
 }

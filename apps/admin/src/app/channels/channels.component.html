@@ -3,16 +3,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar></ion-searchbar>
+  <ion-searchbar [(ngModel)]="search"></ion-searchbar>
   <ion-list>
-    <ion-item>
-      <ion-avatar slot="start">
-        <ion-img src="https://placehold.it/300"></ion-img>
-      </ion-avatar>
+    <ion-item *ngFor="let channel of (channels$ | async | search: search)">
       <ion-label>
-        <h2>Finn</h2>
-        <h3>I'm a big deal</h3>
-        <p>Listen, I've had a pretty messed up day...</p>
+        <h2>{{ channel.name }}</h2>
+        <p>{{ channel.description }}</p>
       </ion-label>
       <ion-button color="danger" fill="clear">
         <ion-icon slot="end" name="trash"></ion-icon>

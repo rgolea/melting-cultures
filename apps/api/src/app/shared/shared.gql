@@ -3,6 +3,13 @@ interface Node {
 }
 
 type Location {
-  lng: String!
-  lat: String!
+  lng: Float!,
+  lat: Float!
 }
+
+input LocationInput {
+  lng: Float!,
+  lat: Float!
+}
+
+scalar Email

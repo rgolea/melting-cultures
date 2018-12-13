@@ -6,6 +6,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { environment } from '../environments/environment';
 import { DeprecatedDirective } from 'graphql-directive-deprecated';
 import { SharedModule } from './shared/shared.module';
+import { join } from 'path';
+import { GraphQLEmail } from "graphql-custom-types";
 
 @Module({
   imports: [
@@ -18,7 +20,8 @@ import { SharedModule } from './shared/shared.module';
       resolvers: {
         Node: {
           __resolveType: obj => obj.ofType
-        }
+        },
+        Email: GraphQLEmail
       },
       schemaDirectives: {
         deprecated: DeprecatedDirective as any

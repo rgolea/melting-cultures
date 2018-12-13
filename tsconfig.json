@@ -23,8 +23,8 @@
       "@meco/*": [
         "libs/*"
       ],
-      "@meco/languages": [
-        "libs/languages/src/index.ts"
+      "@meco/shared": [
+        "libs/shared/src/index.ts"
       ]
     }
   }
