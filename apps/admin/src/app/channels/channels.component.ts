@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, Platform } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { ChannelComponent } from '../channel/channel.component';
 import { Subject } from 'rxjs';
 
@@ -16,7 +16,8 @@ export class ChannelsComponent implements OnInit {
   public channels$ = new Subject<any[]>();
 
   constructor(
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
+    private readonly alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -40,11 +41,30 @@ export class ChannelsComponent implements OnInit {
     console.log('go to streaming...');
   }
 
-  delete(channel){
-    const i = this.channels.indexOf(channel);
-    if(i > -1){
-      this.channels.splice(i, 1);
-      this.channels$.next(this.channels);
-    }
+  async delete(channel){
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Are you sure you want to delete this channel?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Okay',
+          role: 'ok',
+          cssClass: 'primary',
+          handler: () => {
+            const i = this.channels.indexOf(channel);
+            if(i > -1){
+              this.channels.splice(i, 1);
+              this.channels$.next(this.channels);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

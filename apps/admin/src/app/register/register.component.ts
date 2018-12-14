@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { tileLayer, MapOptions, marker, icon, LatLng, LatLngExpression } from 'leaflet';
+import { tileLayer, MapOptions, marker, icon, LatLng } from 'leaflet';
 import { Subject, Subscription } from 'rxjs';
 import { LeafletDirective } from '@asymmetrik/ngx-leaflet';
 import { debounceTime } from 'rxjs/operators';
@@ -63,6 +63,23 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+
+      this.leafletDirective.mapReady.subscribe(async () => {
+        const map = this.leafletDirective.getMap();
+        try {
+          const permissions = await Geolocation.requestPermissions();
+          if(permissions){
+            const { coords } = await Geolocation.getCurrentPosition();
+            const position = new LatLng(coords.latitude, coords.longitude, coords.altitude);
+            map.panTo(position);
+            this.marker.setLatLng(position);
+            this.stateChange();
+          }
+        } catch(err){
+          console.error(err);
+        }
+      });
+
     this.subscriptions.push(
       this.invalidateSize$.pipe(debounceTime(100)).subscribe(async () => {
         const map =
@@ -70,32 +87,10 @@ export class RegisterComponent implements OnInit {
           this.leafletDirective.getMap &&
           this.leafletDirective.getMap();
         if (map) {
-          const result = await this.getPos();
-          const position = new LatLng(result.lat, result.lng);
-          this.marker.setLatLng(position);
-          map.panTo(position);
           map.invalidateSize();
         }
       })
     );
-  }
-
-  async getPos():Promise<{lng: number, lat: number}>{
-    if(this.getPos['memoize']) return Promise.resolve(this.getPos['memoize']);
-    try {
-      const coordinates = await Geolocation.getCurrentPosition();
-      const position = {
-        lat: coordinates.coords.latitude,
-        lng: coordinates.coords.longitude
-      };
-      this.getPos['memoize'] = position;
-      return position;
-    } catch(err){
-      return Promise.resolve({
-        lat: 39.58886,
-        lng: -0.33449
-      });
-    }
   }
 
   ngOnDestroy() {
