@@ -17,7 +17,7 @@ import { SharedModule } from '@meco/shared';
 const routes: Route[] = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
-  { path: 'languages', component: ChannelsComponent },
+  { path: 'channels', component: ChannelsComponent },
   { path: '**', redirectTo: '' }
 ];
 

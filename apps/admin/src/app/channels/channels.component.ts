@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { ChannelComponent } from '../channel/channel.component';
 import { Subject } from 'rxjs';
 
@@ -13,7 +13,7 @@ export class ChannelsComponent implements OnInit {
 
   private channels = [];
 
-  public channels$ = new Subject();
+  public channels$ = new Subject<any[]>();
 
   constructor(
     private readonly modalController: ModalController
@@ -30,7 +30,21 @@ export class ChannelsComponent implements OnInit {
     await modal.present();
 
     const dismissed = await modal.onDidDismiss();
-    this.channels = this.channels.concat(dismissed.data);
-    this.channels$.next(this.channels);
+    if(dismissed.data){
+      this.channels = this.channels.concat(dismissed.data);
+      this.channels$.next(this.channels);
+    }
+  }
+
+  stream(){
+    console.log('go to streaming...');
+  }
+
+  delete(channel){
+    const i = this.channels.indexOf(channel);
+    if(i > -1){
+      this.channels.splice(i, 1);
+      this.channels$.next(this.channels);
+    }
   }
 }

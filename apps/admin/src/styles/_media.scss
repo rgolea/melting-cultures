@@ -1,0 +1,129 @@
+@media (min-width: 0px) {
+  .hide-xs-up {
+    display: none;
+  }
+
+  .show-xs-up {
+    display: block;
+  }
+}
+
+@media (min-width: 576px) {
+  .hide-sm-up {
+    display: none;
+  }
+
+  .show-sm-up {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .hide-md-up {
+    display: none;
+  }
+
+  .show-md-up {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  .hide-lg-up {
+    display: none;
+  }
+
+  .show-lg-up {
+    display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hide-xl-up {
+    display: none;
+  }
+
+  .show-xl-up {
+    display: block;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 575px) {
+  /* Hide all elements with the .hide-xs-only class when the minimum width is 0px (xs breakpoint) and the maximum width is 575px (right before sm breakpoint) */
+  .show-xs-only {
+    display: block;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  /* Hide all elements with the .hide-sm-only class when the minimum width is 576px (sm breakpoint) and the maximum width is 767px (right before md breakpoint) */
+  .show-sm-only {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  /* Hide all elements with the .hide-md-only class when the minimum width is 768px (md breakpoint) and the maximum width is 991px (right before lg breakpoint) */
+  .show-md-only {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* Hide all elements with the .hide-lg-only class when the minimum width is 992px (lg breakpoint) and the maximum width is 1199px (right before xl breakpoint) */
+  .show-lg-only {
+    display: block;
+  }
+}
+
+.ipad .hide-ipad {
+  display: none;
+}
+
+.iphone .hide-iphone {
+  display: none;
+}
+
+.ios .hide-ios {
+  display: none;
+}
+
+.android .hide-android {
+  display: none;
+}
+
+.phablet .hide-phablet {
+  display: none;
+}
+
+.tablet .hide-tablet {
+  display: none;
+}
+
+.cordova .hide-cordova {
+  display: none;
+}
+
+.capacitor .hide-capacitor {
+  display: none;
+}
+
+.electron .hide-electron {
+  display: none;
+}
+
+.pwa .hide-pwa {
+  display: none;
+}
+
+.mobile .hide-mobile {
+  display: none;
+}
+
+.desktop .hide-desktop {
+  display: none;
+}
+
+.hybrid .hide-hybrid {
+  display: none;
+}

@@ -5,8 +5,10 @@
 <ion-content padding>
   <form [formGroup]="form" (ngSubmit)="submit()">
     <formly-form [form]="form" [fields]="fields">
-      <ion-button type="button" color="danger" (click)="reset()">Reset</ion-button>
-      <ion-button type="submit" color="primary" [disabled]="form.invalid">Submit</ion-button>
+      <div float-right>
+        <ion-button type="button" size="6" color="danger" (click)="reset()" fill="outline">Cancel</ion-button>
+        <ion-button type="submit" size="6" color="primary" [disabled]="form.invalid" fill="outline">Submit</ion-button>
+      </div>
     </formly-form>
   </form>
 
