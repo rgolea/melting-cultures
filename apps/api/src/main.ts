@@ -6,6 +6,8 @@ import { SessionService } from './app/shared/session/session.service';
 import { TokenMiddleware } from './app/shared/token/token.middleware';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import { ContextMiddleware } from './app/shared/context/context.middleware';
+import { LoaderService } from './app/shared/loader';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApplicationModule);
@@ -13,7 +15,11 @@ async function bootstrap() {
   const sessionService = app.select(SharedModule).get(SessionService);
   const tokenMiddleware = new TokenMiddleware(sessionService);
 
+  const loaderService = app.select(SharedModule).get(LoaderService);
+  const contextMiddleware = new ContextMiddleware(loaderService);
+
   app.use(tokenMiddleware.resolve());
+  app.use(contextMiddleware.resolve());
   if(environment.production){
     app.use(helmet());
     app.use(

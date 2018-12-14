@@ -13,3 +13,10 @@ input LocationInput {
 }
 
 scalar Email
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: ID
+  endCursor: ID
+}

@@ -3,3 +3,56 @@ type Channel implements Node {
   name: String!
   description: String
 }
+
+type ChannelEdge {
+  cursor: ID!,
+  node: Channel
+}
+
+type ChannelConnection {
+  edges: [ChannelEdge]
+  nodes: [Channel]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type Query {
+  channel(id: ID!): Channel
+  channels(first: Int, after: String, last: Int, before: String):ChannelConnection
+}
+
+type Mutation {
+  addChannel(
+    name: String!
+    description: String
+  ):Channel
+
+  updateChannel(
+    id: ID!
+    name: String!
+    description: String
+  ):Channel
+
+  deleteChannel(id: ID!):Channel
+
+  connectToChannel(
+    id: ID!
+    data: String!
+  ):Boolean
+}
+
+type Connection {
+  channel: Channel!,
+  data: String!
+}
+
+type Subscription {
+  channelStarted(
+    id: ID!
+    data: String!
+  ):Connection
+
+  channelSubscribed(
+    id: ID!
+  ): Connection
+}

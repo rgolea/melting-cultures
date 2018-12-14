@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { SessionService } from './session/session.service';
+import { LoaderService } from "./loader";
 
 @Module({
   providers: [
-    SessionService
+    SessionService,
+    LoaderService
   ],
   exports: [
-    SessionService
+    SessionService,
+    LoaderService
   ]
 })
 export class SharedModule {}

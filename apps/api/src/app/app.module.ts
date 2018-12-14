@@ -1,13 +1,12 @@
 import {
   Module
 } from '@nestjs/common';
-import { ChurchesModule } from './churches/churches.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { environment } from '../environments/environment';
 import { DeprecatedDirective } from 'graphql-directive-deprecated';
 import { SharedModule } from './shared/shared.module';
-import { join } from 'path';
 import { GraphQLEmail } from "graphql-custom-types";
+import { ChannelsModule } from './channels/channels.module';
 
 @Module({
   imports: [
@@ -17,6 +16,7 @@ import { GraphQLEmail } from "graphql-custom-types";
       debug: !environment.production,
       playground: !environment.production,
       introspection: true,
+      installSubscriptionHandlers: true,
       resolvers: {
         Node: {
           __resolveType: obj => obj.ofType
@@ -27,8 +27,9 @@ import { GraphQLEmail } from "graphql-custom-types";
         deprecated: DeprecatedDirective as any
       }
     }),
-    ChurchesModule,
+    ChannelsModule,
     SharedModule
   ]
 })
 export class ApplicationModule {}
+

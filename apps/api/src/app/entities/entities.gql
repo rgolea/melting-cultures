@@ -1,0 +1,21 @@
+type Entity implements Node {
+  id: ID!
+  name: String!
+  email: Email!
+  location: Location!
+}
+
+type Query {
+  viewer: Entity,
+  entity(id: ID!):Entity
+}
+
+type Mutation {
+  register(
+    id: ID!
+    name: String!
+    email: Email!
+    location: LocationInput!
+    password: String!
+  ): Entity
+}

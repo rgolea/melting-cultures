@@ -3,7 +3,9 @@ import { SessionService } from '../session/session.service';
 
 @Injectable()
 export class TokenMiddleware implements NestMiddleware {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(
+    private readonly sessionService: SessionService
+  ) {}
   resolve(): MiddlewareFunction {
     return async (req: Request, _$, next) => {
       req['user'] = {
