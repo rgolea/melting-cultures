@@ -13,10 +13,12 @@ import { ChannelComponent } from './channel/channel.component';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyIonicModule } from '@ngx-formly/ionic';
 import { SharedModule } from '@meco/shared';
+import { LoginComponent } from './login/login.component';
 
 const routes: Route[] = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'channels', component: ChannelsComponent },
   { path: '**', redirectTo: '' }
 ];
@@ -27,7 +29,8 @@ const routes: Route[] = [
     AppComponent,
     RegisterComponent,
     ChannelsComponent,
-    ChannelComponent
+    ChannelComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

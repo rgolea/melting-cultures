@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar><ion-title>Melting Cultures</ion-title></ion-toolbar>
+</ion-header>
+
+<ion-content padding align-items-center>
+  <ion-grid>
+    <ion-row justify-content-center align-items-center>
+      <ion-col size-md="8" size-lg="6" size-xl="4">
+        <form [formGroup]="form" (submit)="login()">
+          <ion-item>
+            <ion-input required type="email" placeholder="Email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              required
+              type="password"
+              placeholder="Password"
+            ></ion-input>
+          </ion-item>
+          <ion-button type="submit" expand="full">Login</ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
