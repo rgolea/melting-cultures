@@ -7,9 +7,13 @@ import { DeprecatedDirective } from 'graphql-directive-deprecated';
 import { SharedModule } from './shared/shared.module';
 import { GraphQLEmail } from "graphql-custom-types";
 import { ChannelsModule } from './channels/channels.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017/meco', {
+      useNewUrlParser: true
+    }),
     GraphQLModule.forRoot({
       context: ({ req }) => req,
       typePaths: ['./**/*.gql'],

@@ -1,5 +1,6 @@
 import { Injectable, NestMiddleware, MiddlewareFunction } from '@nestjs/common';
-import { SessionService } from '../session/session.service';
+import { SessionService, Payload } from '../session/session.service';
+
 
 @Injectable()
 export class TokenMiddleware implements NestMiddleware {
@@ -11,7 +12,7 @@ export class TokenMiddleware implements NestMiddleware {
       req['user'] = {
         role: 'public',
         id: null
-      };
+      } as Payload;
       const authorization: string = req.headers['authorization'] as string;
       const token = authorization ? authorization.split(' ')[1] : null;
       if (!token) return next();

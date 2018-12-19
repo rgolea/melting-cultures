@@ -50,7 +50,7 @@ export class QueryService {
       )
       .skip(0)
       .limit(0)
-      .count();
+      .estimatedDocumentCount();
 
     let count = await (countQuery['maxTime'](500).exec() as Query<number>);
     let query = {

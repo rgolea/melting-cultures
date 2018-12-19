@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { verify, sign } from 'jsonwebtoken';
+import { ROLES } from '../roles';
 
 export type Payload = {
   id: string;
-  role: string;
+  role: ROLES;
 };
 
 @Injectable()
