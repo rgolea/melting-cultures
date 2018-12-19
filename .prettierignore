@@ -1,2 +1,7 @@
 package.json
 dist
+.gradle
+.vscode
+ios
+node_modules
+android
