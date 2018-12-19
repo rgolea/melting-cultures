@@ -1,3 +1,8 @@
+
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE
+
 interface Node {
   id: ID!
 }
@@ -19,4 +24,24 @@ type PageInfo {
   hasPreviousPage: Boolean!
   startCursor: ID
   endCursor: ID
+}
+
+#Tipo sesión.
+type Session {
+  #ID de la sesión. A adjuntar al header del request con el formato Autorization: Bearer <sid>. En caso de estar en desarrollo, también se puede agregar como variable en el apartado de Query Variables de GraphiQL como token.
+  #Ejemplo: {"token": <sid>}. ¡Atención, no disponible en producción!
+  sid: ID!
+  #ID del usuario. En caso de que haga falta refrescar la información del usuario.
+  uid: ID!
+  # Posibilidad de ver al usuario completo. Si la petición del campo no se hace, no se hará otra petición a la base de datos.
+  node: Node
+}
+
+union Viewer = Entity
+
+type Query {
+  #Refrescar contenido de un nodo del graph
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]
+  viewer: Viewer
 }

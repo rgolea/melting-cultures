@@ -5,17 +5,43 @@ type Entity implements Node {
   location: Location!
 }
 
+type EntityEdge {
+  cursor: ID!,
+  node: Entity
+}
+
+type EntityConnection {
+  edges: [EntityEdge]
+  nodes: [Entity]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
 type Query {
-  viewer: Entity,
+  entities(first: Int, after: String, last: Int, before: String, near: LocationInput): EntityConnection,
   entity(id: ID!):Entity
 }
 
 type Mutation {
-  register(
-    id: ID!
+  addEntity(
     name: String!
     email: Email!
-    location: LocationInput!
+    location: LocationInput
     password: String!
   ): Entity
+
+  updateEntity(
+    id: ID!
+    name: String
+    email: Email
+    location: LocationInput
+    password: String
+  ):Entity
+
+  deleteEntity(id: ID!):Boolean
+
+  loginEntity(
+    email: Email!,
+    password: String!
+  ):Session
 }

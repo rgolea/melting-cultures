@@ -23,7 +23,10 @@ import { MongooseModule } from '@nestjs/mongoose';
       installSubscriptionHandlers: true,
       resolvers: {
         Node: {
-          __resolveType: obj => obj.ofType
+          __resolveType: obj => obj.ofType,
+        },
+        Viewer: {
+          __resolveType: obj => obj.ofType,
         },
         Email: GraphQLEmail
       },

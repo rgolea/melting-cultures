@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
-
-const { Geolocation } = Plugins;
 
 @Component({
   selector: 'admin-login',
