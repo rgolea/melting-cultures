@@ -10,7 +10,7 @@ export type ResolverFn = (
 ) => Promise<boolean> | Observable<boolean> | boolean;
 
 export type ValidationCondition = {
-  [K in ROLES]: ResolverFn
+  [K in ROLES]?: ResolverFn
 }
 
 export const Validate = (conditions: ValidationCondition) =>

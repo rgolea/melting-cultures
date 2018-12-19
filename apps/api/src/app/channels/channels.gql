@@ -1,7 +1,8 @@
 type Channel implements Node {
   id: ID!
   name: String!
-  description: String
+  description: String,
+  entity: Entity
 }
 
 type ChannelEdge {
@@ -33,7 +34,7 @@ type Mutation {
     description: String
   ):Channel
 
-  deleteChannel(id: ID!):Channel
+  deleteChannel(id: ID!):Boolean
 
   connectToChannel(
     id: ID!
