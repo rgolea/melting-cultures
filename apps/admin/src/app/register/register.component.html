@@ -8,19 +8,32 @@
       <ion-col size-md="8" size-lg="6" size-xl="4">
         <form [formGroup]="form" (submit)="register()">
           <ion-item>
-            <ion-input required type="email" placeholder="Email"></ion-input>
+            <ion-input
+              required
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+            ></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input required type="text" placeholder="Name"></ion-input>
+            <ion-input required type="text" formControlName="name" placeholder="Name"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input
               required
               type="password"
               placeholder="Password"
+              formControlName="password"
             ></ion-input>
           </ion-item>
-          <div id="map" leaflet [leafletOptions]="options" (leafletMapMoveEnd)="stateChange()" (leafletMapZoomEnd)="stateChange()" (leafletMapReady)="stateChange()"></div>
+          <div
+            id="map"
+            leaflet
+            [leafletOptions]="options"
+            (leafletMapMoveEnd)="stateChange()"
+            (leafletMapZoomEnd)="stateChange()"
+            (leafletMapReady)="stateChange()"
+          ></div>
           <ion-button type="submit" expand="full">Register</ion-button>
         </form>
       </ion-col>

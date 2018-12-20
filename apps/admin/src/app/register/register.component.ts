@@ -6,6 +6,12 @@ import { debounceTime } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { Apollo } from 'apollo-angular';
+import { RegisterMutation } from './register.gql';
+import {
+  AdminRegisterEntity,
+  AdminRegisterEntityVariables
+} from './__generated__/AdminRegisterEntity';
 
 const { Geolocation } = Plugins;
 
@@ -15,7 +21,6 @@ const { Geolocation } = Plugins;
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-
   public form = this.formBuilder.group({
     email: ['', [Validators.email, Validators.required]],
     name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]],
@@ -45,10 +50,7 @@ export class RegisterComponent implements OnInit {
 
   public options: MapOptions = {
     zoom: 15,
-    layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
-      this.marker
-    ],
+    layers: [tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'), this.marker],
     center: {
       lat: 39.58886,
       lng: -0.33449
@@ -59,33 +61,33 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly apollo: Apollo
   ) {}
 
   async ngOnInit() {
+    this.marker.on('dragend', () => this.form.get('location').patchValue(this.marker.getLatLng()));
 
-      this.leafletDirective.mapReady.subscribe(async () => {
-        const map = this.leafletDirective.getMap();
-        try {
-          const permissions = await Geolocation.requestPermissions();
-          if(permissions){
-            const { coords } = await Geolocation.getCurrentPosition();
-            const position = new LatLng(coords.latitude, coords.longitude, coords.altitude);
-            map.panTo(position);
-            this.marker.setLatLng(position);
-            this.stateChange();
-          }
-        } catch(err){
-          console.error(err);
+    this.leafletDirective.mapReady.subscribe(async () => {
+      const map = this.leafletDirective.getMap();
+      try {
+        const permissions = await Geolocation.requestPermissions();
+        if (permissions) {
+          const { coords } = await Geolocation.getCurrentPosition();
+          const position = new LatLng(coords.latitude, coords.longitude, coords.altitude);
+          map.panTo(position);
+          this.marker.setLatLng(position);
+          this.stateChange();
         }
-      });
+      } catch (err) {
+        console.error(err);
+      }
+    });
 
     this.subscriptions.push(
       this.invalidateSize$.pipe(debounceTime(100)).subscribe(async () => {
         const map =
-          this.leafletDirective &&
-          this.leafletDirective.getMap &&
-          this.leafletDirective.getMap();
+          this.leafletDirective && this.leafletDirective.getMap && this.leafletDirective.getMap();
         if (map) {
           map.invalidateSize();
         }
@@ -94,6 +96,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.marker.off('dragend');
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
@@ -101,7 +104,23 @@ export class RegisterComponent implements OnInit {
     this.invalidateSize$.next('stateChange');
   }
 
-  register(){
-    this.router.navigate(['/channels']);
+  async register() {
+    console.log(this.form.value);
+    if (this.form.invalid) return;
+    await this.apollo
+      .mutate<AdminRegisterEntity, AdminRegisterEntityVariables>({
+        mutation: RegisterMutation,
+        variables: {
+          email: this.form.get('email').value,
+          name: this.form.get('name').value,
+          password: this.form.get('password').value,
+          location: {
+            lat: this.form.get('location').get('lat').value,
+            lng: this.form.get('location').get('lng').value
+          }
+        }
+      })
+      .toPromise();
+    this.router.navigate(['/login']);
   }
 }

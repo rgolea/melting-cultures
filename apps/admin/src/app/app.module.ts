@@ -14,6 +14,7 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyIonicModule } from '@ngx-formly/ionic';
 import { SharedModule } from '@meco/shared';
 import { LoginComponent } from './login/login.component';
+import { ConnectionModule } from '@meco/connection/src';
 
 const routes: Route[] = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
@@ -50,7 +51,10 @@ const routes: Route[] = [
       ]
     }),
     FormlyIonicModule,
-    SharedModule
+    SharedModule,
+    ConnectionModule.forRoot({
+      apiUrl: 'http://localhost:3000/graphql'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -106,13 +106,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/app/tsconfig.app.json",
-              "apps/app/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/app/tsconfig.app.json", "apps/app/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "ionic-cordova-build": {
@@ -156,9 +151,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/app-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -191,9 +184,7 @@
                 "output": "assets/"
               }
             ],
-            "styles": [
-              "apps/admin/src/styles.scss"
-            ],
+            "styles": ["apps/admin/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -247,26 +238,16 @@
             "polyfills": "apps/admin/src/polyfills.ts",
             "tsConfig": "apps/admin/tsconfig.spec.json",
             "karmaConfig": "apps/admin/karma.conf.js",
-            "styles": [
-              "apps/admin/src/styles.scss"
-            ],
+            "styles": ["apps/admin/src/styles.scss"],
             "scripts": [],
-            "assets": [
-              "apps/admin/src/favicon.ico",
-              "apps/admin/src/assets"
-            ]
+            "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/admin/tsconfig.app.json",
-              "apps/admin/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/admin/tsconfig.app.json", "apps/admin/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -292,9 +273,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/admin-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -312,9 +291,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -338,13 +315,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/api/tsconfig.app.json",
-              "apps/api/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/api/tsconfig.app.json", "apps/api/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -373,13 +345,31 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/tsconfig.lib.json",
-              "libs/shared/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["libs/shared/tsconfig.lib.json", "libs/shared/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "connection": {
+      "root": "libs/connection",
+      "sourceRoot": "libs/connection/src",
+      "projectType": "library",
+      "prefix": "meco",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/connection/src/test.ts",
+            "tsConfig": "libs/connection/tsconfig.spec.json",
+            "karmaConfig": "libs/connection/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/connection/tsconfig.lib.json", "libs/connection/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

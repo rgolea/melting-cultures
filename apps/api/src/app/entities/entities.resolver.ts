@@ -28,16 +28,27 @@ export class EntitiesResolver {
     return toGlobalID(entity._id, EntityCollection);
   }
 
+  @ResolveProperty()
+  location({ location }) {
+    if (!location) return {};
+    return {
+      lng: location[0],
+      lat: location[1]
+    };
+  }
+
   @Query()
   async entities(@Args() args, @Context('loader') loader, @Ip() ip) {
-    if(ip){
-      const res = await this.httpService.get<{longitude: number, latitude: number}>(`http://api.ipstack.com/${ip}`, {
-        params: {
-          access_key: environment.IPSTACK_ACCESSKEY,
-          format: 1,
-          fields: 'latitude,longitude'
-        }
-      }).toPromise()
+    if (ip && !args.near) {
+      const res = await this.httpService
+        .get<{ longitude: number; latitude: number }>(`http://api.ipstack.com/${ip}`, {
+          params: {
+            access_key: environment.IPSTACK_ACCESSKEY,
+            format: 1,
+            fields: 'latitude,longitude'
+          }
+        })
+        .toPromise();
 
       const { latitude: lat, longitude: lng } = res.data;
       args.near = {
@@ -63,24 +74,20 @@ export class EntitiesResolver {
   }
 
   @Mutation()
-  async addEntity(@Args() obj: EntityInterface | { location?: { lng: number; lat: number } }, @Ip() ip) {
-    /*
-     * TODO: Implement geolocation if no location is passed
-     *
-     * if(!obj.location){
-     *   const location: { lng: string, lat: string } = (result of query to DNS);
-     *
-     *   args.location = location;
-     * }
-     */
-    if(ip){
-      const res = await this.httpService.get<{longitude: number, latitude: number}>(`http://api.ipstack.com/${ip}`, {
-        params: {
-          access_key: environment.IPSTACK_ACCESSKEY,
-          format: 1,
-          fields: 'latitude,longitude'
-        }
-      }).toPromise()
+  async addEntity(
+    @Args() obj: EntityInterface | { location?: { lng: number; lat: number } },
+    @Ip() ip
+  ) {
+    if (ip && !location) {
+      const res = await this.httpService
+        .get<{ longitude: number; latitude: number }>(`http://api.ipstack.com/${ip}`, {
+          params: {
+            access_key: environment.IPSTACK_ACCESSKEY,
+            format: 1,
+            fields: 'latitude,longitude'
+          }
+        })
+        .toPromise();
 
       const { latitude: lat, longitude: lng } = res.data;
       obj.location = {
@@ -94,7 +101,8 @@ export class EntitiesResolver {
     }
 
     const model = new this.entityModel(obj);
-    return await model.save();
+    const res = await model.save();
+    return res;
   }
 
   @Roles('entity')
