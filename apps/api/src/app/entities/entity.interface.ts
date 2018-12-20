@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 export const EntityCollection = 'Entity';
 
-export interface Entity extends Document {
+export interface EntityInterface extends Document {
   name: string;
   email: string;
   password: string;

@@ -1,39 +1,50 @@
 import { Resolver, Mutation, Args, Context, ResolveProperty, Query } from '@nestjs/graphql';
 import { QueryService } from '../shared/query/query.service';
-import { EntityCollection, Entity } from './entity.interface';
+import { EntityCollection, EntityInterface } from './entity.interface';
 import { SessionService, Payload } from '../shared/session/session.service';
 import { toGlobalID } from '../shared/transform';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Roles, RolesGuard } from '../shared/roles';
 import { Validate, ValidationGuard } from '../shared/validation';
-import { UseGuards } from '@nestjs/common';
-import { ChannelCollection, Channel } from '../channels/channel.interface';
+import { UseGuards, HttpService } from '@nestjs/common';
+import { ChannelCollection, ChannelInterface } from '../channels/channel.interface';
+import { Ip } from '../shared/decorators';
+import { environment } from '../../environments/environment';
 
 @UseGuards(RolesGuard, ValidationGuard)
 @Resolver('Entity')
 export class EntitiesResolver {
   constructor(
-    @InjectModel(EntityCollection) private readonly entityModel: Model<Entity>,
+    @InjectModel(EntityCollection) private readonly entityModel: Model<EntityInterface>,
     private readonly queryService: QueryService,
     private readonly sessionService: SessionService,
-    @InjectModel(ChannelCollection) private readonly channelModel: Model<Channel>
+    @InjectModel(ChannelCollection) private readonly channelModel: Model<ChannelInterface>,
+    private readonly httpService: HttpService
   ) {}
 
   @ResolveProperty()
-  id(entity: Entity) {
+  id(entity: EntityInterface) {
     return toGlobalID(entity._id, EntityCollection);
   }
 
   @Query()
-  async entities(@Args() args, @Context('loader') loader) {
-    //TODO: Implement geolocation if no location is passed
-    /* if(!args.near){
-     *   const location: { lng: string, lat: string } = (result of query to DNS);
-     *
-     *   args.near = location;
-     * }
-     */
+  async entities(@Args() args, @Context('loader') loader, @Ip() ip) {
+    if(ip){
+      const res = await this.httpService.get<{longitude: number, latitude: number}>(`http://api.ipstack.com/${ip}`, {
+        params: {
+          access_key: environment.IPSTACK_ACCESSKEY,
+          format: 1,
+          fields: 'latitude,longitude'
+        }
+      }).toPromise()
+
+      const { latitude: lat, longitude: lng } = res.data;
+      args.near = {
+        lat,
+        lng
+      };
+    }
 
     if (args.near) {
       args.location = {
@@ -52,7 +63,7 @@ export class EntitiesResolver {
   }
 
   @Mutation()
-  async addEntity(@Args() obj: Entity & { location?: { lng: number; lat: number } }) {
+  async addEntity(@Args() obj: EntityInterface | { location?: { lng: number; lat: number } }, @Ip() ip) {
     /*
      * TODO: Implement geolocation if no location is passed
      *
@@ -62,6 +73,22 @@ export class EntitiesResolver {
      *   args.location = location;
      * }
      */
+    if(ip){
+      const res = await this.httpService.get<{longitude: number, latitude: number}>(`http://api.ipstack.com/${ip}`, {
+        params: {
+          access_key: environment.IPSTACK_ACCESSKEY,
+          format: 1,
+          fields: 'latitude,longitude'
+        }
+      }).toPromise()
+
+      const { latitude: lat, longitude: lng } = res.data;
+      obj.location = {
+        lat,
+        lng
+      };
+    }
+
     if (obj.location) {
       (obj.location as [number, number]) = [obj.location['lng'], obj.location['lat']];
     }
@@ -72,14 +99,14 @@ export class EntitiesResolver {
 
   @Roles('entity')
   @Validate({
-    entity: async (_$, obj: Entity, { loader, user }: { loader: any; user: Payload }) => {
-      const entity: Entity = await loader.load(obj.id);
+    entity: async (_$, obj: EntityInterface, { loader, user }: { loader: any; user: Payload }) => {
+      const entity: EntityInterface = await loader.load(obj.id);
       return toGlobalID(entity._id, EntityCollection) === user.id;
     }
   })
   @Mutation()
   async updateEntity(
-    @Args() obj: Entity & { location?: { lng: number; lat: number } },
+    @Args() obj: EntityInterface & { location?: { lng: number; lat: number } },
     @Context('loader') loader
   ) {
     /*
@@ -94,7 +121,7 @@ export class EntitiesResolver {
     if (obj.location) {
       (obj.location as [number, number]) = [obj.location['lng'], obj.location['lat']];
     }
-    const entity: Entity = await loader.load(obj.id);
+    const entity: EntityInterface = await loader.load(obj.id);
     Object.assign(entity, obj);
     return await entity.save();
   }
@@ -105,7 +132,7 @@ export class EntitiesResolver {
   })
   @Mutation()
   async deleteEntity(@Args('id') id: string, @Context('loader') loader) {
-    const entity: Entity = await loader.load(id);
+    const entity: EntityInterface = await loader.load(id);
     return !!(await Promise.all([
       entity.remove(),
       this.channelModel.deleteMany({

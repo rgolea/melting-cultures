@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 export const ChannelCollection = 'Channel';
 
-export interface Channel extends Document {
+export interface ChannelInterface extends Document {
   name: string;
   description: string;
   entityId: string;

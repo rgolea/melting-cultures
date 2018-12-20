@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Query, Args, Context } from "@nestjs/graphql";
 import { QueryService } from "../shared/query/query.service";
-import { ChannelCollection, Channel } from "./channel.interface";
+import { ChannelCollection, ChannelInterface } from "./channel.interface";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { UseGuards } from "@nestjs/common";
@@ -13,7 +13,7 @@ import { Payload } from '../shared/session/session.service';
 export class ChannelsResolver {
 
   constructor(
-    @InjectModel(ChannelCollection) private readonly channelModel: Model<Channel>,
+    @InjectModel(ChannelCollection) private readonly channelModel: Model<ChannelInterface>,
     private readonly queryService: QueryService
   ){}
 
@@ -29,24 +29,24 @@ export class ChannelsResolver {
 
   @Roles('entity')
   @Validate({
-    entity: (_$, obj: Channel, { user }: { user: Payload }) => !!(obj.entityId = user.id)
+    entity: (_$, obj: ChannelInterface, { user }: { user: Payload }) => !!(obj.entityId = user.id)
   })
   @Mutation()
-  async addChannel(@Args() obj:Channel){
+  async addChannel(@Args() obj:ChannelInterface){
     const model = new this.channelModel(obj);
     return await model.save();
   }
 
   @Roles('entity')
   @Validate({
-    entity: async (_$, obj: Channel, { user, loader }: { user: Payload, loader: any }) => {
-      const channel:Channel = await loader.load(obj.id);
+    entity: async (_$, obj: ChannelInterface, { user, loader }: { user: Payload, loader: any }) => {
+      const channel:ChannelInterface = await loader.load(obj.id);
       return channel.entityId === user.id;
     }
   })
   @Mutation()
-  async updateChannel(@Args() obj: Channel, @Context('loader') loader){
-    const channel: Channel = await loader.load(obj.id);
+  async updateChannel(@Args() obj: ChannelInterface, @Context('loader') loader){
+    const channel: ChannelInterface = await loader.load(obj.id);
     Object.assign(channel, obj);
     return await channel.save();
   }
@@ -54,13 +54,13 @@ export class ChannelsResolver {
   @Roles('entity')
   @Validate({
     entity: async (_$, { id }: { id: string }, { user, loader }: { user: Payload, loader: any }) => {
-      const channel:Channel = await loader.load(id);
+      const channel:ChannelInterface = await loader.load(id);
       return channel.entityId === user.id;
     }
   })
   @Mutation()
   async deleteChannel(@Args('id') id: string, @Context('loader') loader){
-    const channel:Channel = await loader.load(id);
+    const channel:ChannelInterface = await loader.load(id);
     return !!(channel.remove());
   }
 }
